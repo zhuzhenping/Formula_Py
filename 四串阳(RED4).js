@@ -1,0 +1,1 @@
+﻿A:EVERY(CLOSE>OPEN,4);

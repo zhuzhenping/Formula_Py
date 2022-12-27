@@ -1,0 +1,3 @@
+CONST N=100;
+
+RET:COUNT(C>REF(C,1),N)=N;

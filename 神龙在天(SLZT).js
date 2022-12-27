@@ -1,0 +1,8 @@
+﻿白龙: MA(CLOSE,125);
+黄龙: 白龙+2*STD(CLOSE,170);
+紫龙: 白龙-2*STD(CLOSE,145);
+青龙: SAR(125,1,7), LINESTICK;
+VAR2:=HHV(HIGH,70);
+VAR3:=HHV(HIGH,20);
+红龙: VAR2*0.83;
+蓝龙: VAR3*0.91;

@@ -1,0 +1,3 @@
+CONST M=100;
+
+RET: EVERY(VOL >= REF(VOL, 1), M);

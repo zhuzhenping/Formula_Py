@@ -1,0 +1,8 @@
+JJ:=(CLOSE+HIGH+LOW)/3; 
+A:=EMA(JJ,10); 
+B:=REF(A,1);
+STICKLINE(A>B,A,B,2,0),COLORYELLOW; 
+STICKLINE(A<B,A,B,2,0),COLORGREEN; 
+引力线a:(MA(CLOSE,30)+MA(CLOSE,35))/2; 
+引力区1:引力线a*1.1; 
+引力区2:引力线a*0.9;

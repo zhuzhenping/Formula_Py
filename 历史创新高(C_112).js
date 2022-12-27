@@ -1,0 +1,1 @@
+RET: HHV(CLOSE, 0) = CLOSE;
