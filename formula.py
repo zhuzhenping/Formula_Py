@@ -34,6 +34,19 @@ def calculateFormula(formula, data):
 	facecatcpp.calcFormula(c_char_p(formula.encode('utf-8')), c_char_p(sendStr.encode('utf-8')), recvData)
 	return str(recvData.value, encoding="gbk")
 
+m_shapes = ""
+#调用C++计算指标，附带图形返回
+#formula 公式
+#datas 数据
+def calculateFormulaWithShapes(formula, data):
+	global m_shapes
+	recvData = create_string_buffer(1024 * 1024 * 10)
+	recvData2 = create_string_buffer(1024 * 1024)
+	sendStr = securityDatasToStr(datas)
+	facecatcpp.calcFormulaWithShapes(c_char_p(formula.encode('utf-8')), c_char_p(sendStr.encode('utf-8')), recvData, recvData2)
+	m_shapes = str(recvData2.value, encoding="gbk")
+	return str(recvData.value, encoding="gbk")
+
 #读取指标公式
 file0 = open(os.getcwd() + "\\指数平滑异同平均线(MACD).js")
 formulaStr = file0.read()
@@ -62,7 +75,8 @@ try:
 			datas.append(data)
 		pos = pos - 1
 	#计算指标
-	result = calculateFormula(formulaStr, datas)
+	result = calculateFormulaWithShapes(formulaStr, datas)
+	print(m_shapes)
 	print(result)
 except requests.exceptions.RequestException as e:
 	print(e)
