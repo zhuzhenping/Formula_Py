@@ -31,7 +31,7 @@ cdll.argtypes = [c_char_p, c_int, c_double, c_long, c_wchar_p]
 def calculateFormula(formula, datas):
 	recvData = create_string_buffer(1024 * 1024 * 10)
 	sendStr = securityDatasToStr(datas)
-	facecatcpp.calcFormula(c_char_p(formula.encode('utf-8')), c_char_p(sendStr.encode('utf-8')), recvData)
+	facecatcpp.calcFormula(c_char_p(formula.encode('gbk')), c_char_p(sendStr.encode('gbk')), recvData)
 	return str(recvData.value, encoding="gbk")
 
 m_shapes = ""
@@ -43,7 +43,7 @@ def calculateFormulaWithShapes(formula, datas):
 	recvData = create_string_buffer(1024 * 1024 * 10)
 	recvData2 = create_string_buffer(1024 * 1024)
 	sendStr = securityDatasToStr(datas)
-	facecatcpp.calcFormulaWithShapes(c_char_p(formula.encode('utf-8')), c_char_p(sendStr.encode('utf-8')), recvData, recvData2)
+	facecatcpp.calcFormulaWithShapes(c_char_p(formula.encode('gbk')), c_char_p(sendStr.encode('gbk')), recvData, recvData2)
 	m_shapes = str(recvData2.value, encoding="gbk")
 	return str(recvData.value, encoding="gbk")
 
