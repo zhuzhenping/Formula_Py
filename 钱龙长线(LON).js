@@ -1,4 +1,4 @@
-﻿LC := REF(CLOSE,1);
+LC := REF(CLOSE,1);
 VID := SUM(VOL,2)/(((HHV(HIGH,2)-LLV(LOW,2)))*100);
 RC := (CLOSE-LC)*VID;
 LONG := SUM(RC,0);

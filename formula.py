@@ -28,7 +28,7 @@ cdll.argtypes = [c_char_p, c_int, c_double, c_long, c_wchar_p]
 #调用C++计算指标
 #formula 公式
 #datas 数据
-def calculateFormula(formula, data):
+def calculateFormula(formula, datas):
 	recvData = create_string_buffer(1024 * 1024 * 10)
 	sendStr = securityDatasToStr(datas)
 	facecatcpp.calcFormula(c_char_p(formula.encode('utf-8')), c_char_p(sendStr.encode('utf-8')), recvData)
@@ -38,7 +38,7 @@ m_shapes = ""
 #调用C++计算指标，附带图形返回
 #formula 公式
 #datas 数据
-def calculateFormulaWithShapes(formula, data):
+def calculateFormulaWithShapes(formula, datas):
 	global m_shapes
 	recvData = create_string_buffer(1024 * 1024 * 10)
 	recvData2 = create_string_buffer(1024 * 1024)
@@ -48,7 +48,7 @@ def calculateFormulaWithShapes(formula, data):
 	return str(recvData.value, encoding="gbk")
 
 #读取指标公式
-file0 = open(os.getcwd() + "\\指数平滑异同平均线(MACD).js")
+file0 = open(os.getcwd() + "\\指数平滑异同平均线(MACD).js", encoding="UTF-8")
 formulaStr = file0.read()
 file0.close()
 

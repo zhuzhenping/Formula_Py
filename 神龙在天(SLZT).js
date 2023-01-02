@@ -1,4 +1,4 @@
-﻿白龙: MA(CLOSE,125);
+白龙: MA(CLOSE,125);
 黄龙: 白龙+2*STD(CLOSE,170);
 紫龙: 白龙-2*STD(CLOSE,145);
 青龙: SAR(125,1,7), LINESTICK;

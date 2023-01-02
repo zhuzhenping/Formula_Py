@@ -3291,6 +3291,7 @@ def calculateChartMaxMin(chart):
 							chart.m_indMax2 = shape.m_datas2[i]
 						if (shape.m_datas2[i] < chart.m_indMin2):
 							chart.m_indMin2 = shape.m_datas2[i]
+					
 	if (isTrend):
 		subMax = max(abs(chart.m_candleMax - firstOpen), abs(chart.m_candleMin - firstOpen))
 		chart.m_candleMax = firstOpen + subMax
@@ -5745,14 +5746,23 @@ def drawChartStock(chart, paint, clipRect):
 		for i in range(0, len(chart.m_shapes)):
 			shape = chart.m_shapes[i]
 			if(shape.m_type == "bar"):
-				for i in range(chart.m_firstVisibleIndex,lastValidIndex + 1):
-					x = getChartX(chart, i)
-					y1 = getChartY(chart, shape.m_divIndex, shape.m_datas[i])
-					y2 = getChartY(chart, shape.m_divIndex, shape.m_datas2[i])
-					if(y1 >= y2):
-						paint.fillRect(shape.m_color, x - cWidth, y2, x + cWidth, y1)
+				for j in range(chart.m_firstVisibleIndex,lastValidIndex + 1):
+					x = getChartX(chart, j)
+					y1 = getChartY(chart, shape.m_divIndex, shape.m_datas[j])
+					if(shape.m_style != "2color"):
+						y2 = getChartY(chart, shape.m_divIndex, shape.m_datas2[j])
+						if(y1 >= y2):
+							paint.fillRect(shape.m_color, x - cWidth, y2, x + cWidth, y1)
+						else:
+							paint.fillRect(shape.m_color, x - cWidth, y1, x + cWidth, y2)
 					else:
-						paint.fillRect(shape.m_color, x - cWidth, y1, x + cWidth, y2)
+						y2 = getChartY(chart, shape.m_divIndex, 0)
+						if(y1 >= y2):
+							paint.drawLine(shape.m_color2, 1, 0, x, y1, x, y2)
+						else:
+							paint.drawLine(shape.m_color, 1, 0, x, y1, x, y2)
+						if(j == lastValidIndex):
+							paint.drawLine(shape.m_color2, 1, 0, chart.m_leftVScaleWidth, y2, chart.m_size.cx - chart.m_rightVScaleWidth, y2)
 			else:
 				if(chart.m_selectShape == shape.m_name):
 					drawChartLines(chart, paint, clipRect, shape.m_divIndex, shape.m_datas, shape.m_color, TRUE)
