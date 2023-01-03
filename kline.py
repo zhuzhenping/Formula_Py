@@ -541,57 +541,62 @@ def bindFormula(name):
 	m_chart = findViewByName("chart", m_paint.m_views)
 	result = calculateFormulaWithShapes(formulaStr, m_chart.m_data)
 	m_chart.m_shapes = []
+	print(m_shapes)
 	shapesArray = m_shapes.split("\r\n")
 	pos = 0
 	for s in range(0, len(shapesArray)):
 		subStrs = shapesArray[s].split(",")
 		if(len(subStrs) >= 2):
 			if(subStrs[0] == "bar"):
-				is2Color = FALSE
-				if(len(subStrs) == 2 or len(subStrs[2]) == 0):
-					is2Color = TRUE
-				bar1 = BaseShape()
-				bar1.m_color = "rgb(255,80,80)"
-				bar1.m_color2 =  "rgb(80,255,255)"
-				bar1.m_divIndex = 2
-				bar1.m_type = "bar"
-				bar1.m_name = subStrs[1]
-				bar1.m_title = subStrs[1]
-				if(is2Color):
-					bar1.m_style = "2color"
-				else:
-					bar1.m_title2 = subStrs[2]
-				m_chart.m_shapes.append(bar1)
-				resultStrs = result.split("\r\n")
-				colIndex = 0
-				colIndex2 = 1
-				for r in range(0, len(resultStrs)):
-					sunStrs = resultStrs[r].split(",")
-					if(r == 0):
-						for u in range(0, len(sunStrs)):
-							if(sunStrs[u] == subStrs[1]):
-								colIndex = u
-							if(is2Color == FALSE):
-								if(sunStrs[u] == subStrs[2]):
-									colIndex2 = u
+				if(len(subStrs[1]) > 0):
+					is2Color = FALSE
+					if(len(subStrs) == 2 or len(subStrs[2]) == 0):
+						is2Color = TRUE
+					bar1 = BaseShape()
+					s = s + 1
+					colorStrs = shapesArray[s].split("|")
+					bar1.m_color = colorStrs[0]
+					bar1.m_color2 =  colorStrs[1]
+					bar1.m_divIndex = 2
+					bar1.m_type = "bar"
+					bar1.m_name = subStrs[1]
+					bar1.m_title = subStrs[1]
+					if(is2Color):
+						bar1.m_style = "2color"
 					else:
-						if(len(sunStrs) >= colIndex + 1):
-							if(len(sunStrs[colIndex]) > 0 and sunStrs[colIndex] != '1.#QNAN0'):
-								bar1.m_datas.append(float(sunStrs[colIndex]))
-							else:
-								bar1.m_datas.append(0)
-							if(is2Color == FALSE):
-								if(len(sunStrs[colIndex2]) > 0 and sunStrs[colIndex2] != '1.#QNAN0'):
-									bar1.m_datas2.append(float(sunStrs[colIndex2]))
+						bar1.m_title2 = subStrs[2]
+					m_chart.m_shapes.append(bar1)
+					resultStrs = result.split("\r\n")
+					colIndex = 0
+					colIndex2 = 1
+					for r in range(0, len(resultStrs)):
+						sunStrs = resultStrs[r].split(",")
+						if(r == 0):
+							for u in range(0, len(sunStrs)):
+								if(sunStrs[u] == subStrs[1]):
+									colIndex = u
+								if(is2Color == FALSE):
+									if(sunStrs[u] == subStrs[2]):
+										colIndex2 = u
+						else:
+							if(len(sunStrs) >= colIndex + 1):
+								if(len(sunStrs[colIndex]) > 0 and sunStrs[colIndex] != '1.#QNAN0'):
+									bar1.m_datas.append(float(sunStrs[colIndex]))
 								else:
-									bar1.m_datas2.append(0)
+									bar1.m_datas.append(0)
+								if(is2Color == FALSE):
+									if(len(sunStrs[colIndex2]) > 0 and sunStrs[colIndex2] != '1.#QNAN0'):
+										bar1.m_datas2.append(float(sunStrs[colIndex2]))
+									else:
+										bar1.m_datas2.append(0)
 	pos = 0
 	for s in range(0, len(shapesArray)):
 		subStrs = shapesArray[s].split(",")
 		if(len(subStrs) >= 2):
 			if(subStrs[0] == "line"):
 				line1 = BaseShape()
-				line1.m_color = m_drawColors[pos % len(m_drawColors)]
+				s = s + 1
+				line1.m_color = shapesArray[s]
 				line1.m_divIndex = 2
 				line1.m_name = subStrs[1]
 				line1.m_title = subStrs[1]

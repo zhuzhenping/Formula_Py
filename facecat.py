@@ -53,6 +53,8 @@ def toColor(strColor):
 		strs = strColor.split(",")
 		if(len(strs) >= 3):
 			return win32api.RGB(int(strs[0]),int(strs[1]),int(strs[2]))
+	elif(strColor != "none" and len(strColor) > 0):
+		return int(float(strColor))
 	return 0
 
 class FCPaint(object):
