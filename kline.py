@@ -483,13 +483,6 @@ def onViewMouseUp(view, mp, buttons, clicks, delta):
 		invalidateView(view, view.m_paint)
 
 m_addingPlot_Chart = ""
-m_drawColors = []
-m_drawColors.append("rgb(255,255,255)")
-m_drawColors.append("rgb(255,255,0)")
-m_drawColors.append("rgb(255,0,255)")
-m_drawColors.append("rgb(0,255,0)")
-m_drawColors.append("rgb(82,255,255)")
-m_drawColors.append("rgb(255,82,82)")
 
 #视图的鼠标点击方法
 #view 视图
@@ -541,9 +534,7 @@ def bindFormula(name):
 	m_chart = findViewByName("chart", m_paint.m_views)
 	result = calculateFormulaWithShapes(formulaStr, m_chart.m_data)
 	m_chart.m_shapes = []
-	print(m_shapes)
 	shapesArray = m_shapes.split("\r\n")
-	pos = 0
 	for s in range(0, len(shapesArray)):
 		subStrs = shapesArray[s].split(",")
 		if(len(subStrs) >= 2):
@@ -589,7 +580,6 @@ def bindFormula(name):
 										bar1.m_datas2.append(float(sunStrs[colIndex2]))
 									else:
 										bar1.m_datas2.append(0)
-	pos = 0
 	for s in range(0, len(shapesArray)):
 		subStrs = shapesArray[s].split(",")
 		if(len(subStrs) >= 2):
@@ -616,7 +606,36 @@ def bindFormula(name):
 								line1.m_datas.append(float(sunStrs[colIndex]))
 							else:
 								line1.m_datas.append(0)
-				pos = pos + 1
+	for s in range(0, len(shapesArray)):
+		subStrs = shapesArray[s].split(",")
+		if(len(subStrs) >= 2):
+			if(subStrs[0] == "text"):
+				textShape = BaseShape()
+				s = s + 1
+				textShape.m_text = shapesArray[s]
+				s = s + 1
+				textShape.m_color = shapesArray[s]
+				textShape.m_divIndex = 2
+				textShape.m_type = "text"
+				textShape.m_name = subStrs[1]
+				textShape.m_title = subStrs[1]
+				m_chart.m_shapes.append(textShape)
+				resultStrs = result.split("\r\n")
+				colIndex = 0
+				for r in range(0, len(resultStrs)):
+					sunStrs = resultStrs[r].split(",")
+					if(r == 0):
+						for u in range(0, len(sunStrs)):
+							if(sunStrs[u] == subStrs[1]):
+								colIndex = u
+								break
+					else:
+						if(len(sunStrs) >= colIndex + 1):
+							if(len(sunStrs[colIndex]) > 0 and sunStrs[colIndex] != '1.#QNAN0'):
+								textShape.m_value = float(sunStrs[colIndex])
+								textShape.m_datas.append(1)
+							else:
+								textShape.m_datas.append(0)
 	calcChartIndicator(m_chart)
 	invalidateView(m_chart, m_chart.m_paint)
 	

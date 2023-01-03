@@ -656,6 +656,8 @@ class BaseShape(object):
 		self.m_title2 = "" #第二个标题
 		self.m_name = "" #名称
 		self.m_style = "" #样式
+		self.m_text = "" #显示的文字
+		self.m_value = 0 #显示文字的值
 
 #画线工具结构
 class FCPlot(object):
@@ -5305,11 +5307,12 @@ def drawChartCrossLine(chart, paint, clipRect):
 						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
 						drawColors.append(shape.m_color2)
 					else:
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color)
-						if(len(shape.m_datas2) > 0):
-							drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color2)
+						if(shape.m_type != "text"):
+							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+							drawColors.append(shape.m_color)
+							if(len(shape.m_datas2) > 0):
+								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color2)
 						
 					
 		iLeft = chart.m_leftVScaleWidth + 5
@@ -5331,11 +5334,12 @@ def drawChartCrossLine(chart, paint, clipRect):
 						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
 						drawColors.append(shape.m_color2)
 					else:
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color)
-						if(len(shape.m_datas2) > 0):
-							drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color2)
+						if(shape.m_type != "text"):
+							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+							drawColors.append(shape.m_color)
+							if(len(shape.m_datas2) > 0):
+								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color2)
 		for i in range(0,len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
 			paint.drawText(drawTitles[i], drawColors[i], chart.m_font, iLeft, 5)
@@ -5371,11 +5375,12 @@ def drawChartCrossLine(chart, paint, clipRect):
 						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
 						drawColors.append(shape.m_color2)
 					else:
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color)
-						if(len(shape.m_datas2) > 0):
-							drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color2)
+						if(shape.m_type != "text"):
+							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+							drawColors.append(shape.m_color)
+							if(len(shape.m_datas2) > 0):
+								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color2)
 		iLeft = chart.m_leftVScaleWidth + 5
 		for i in range(0, len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
@@ -5446,11 +5451,12 @@ def drawChartCrossLine(chart, paint, clipRect):
 						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
 						drawColors.append(shape.m_color2)
 					else:
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color)
-						if(len(shape.m_datas2) > 0):
-							drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color2)
+						if(shape.m_type != "text"):
+							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+							drawColors.append(shape.m_color)
+							if(len(shape.m_datas2) > 0):
+								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color2)
 		iLeft = chart.m_leftVScaleWidth + 5
 		for i in range(0,len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
@@ -5467,11 +5473,12 @@ def drawChartCrossLine(chart, paint, clipRect):
 						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
 						drawColors.append(shape.m_color2)
 					else:
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color)
-						if(len(shape.m_datas2) > 0):
-							drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color2)
+						if(shape.m_type != "text"):
+							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+							drawColors.append(shape.m_color)
+							if(len(shape.m_datas2) > 0):
+								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color2)
 			if(len(drawTitles) > 0):
 				iLeft = chart.m_leftVScaleWidth + 5
 				for i in range(0,len(drawTitles)):
@@ -5798,6 +5805,14 @@ def drawChartStock(chart, paint, clipRect):
 							paint.drawLine(shape.m_color, 1, 0, x, y1, x, y2)
 						if(j == lastValidIndex):
 							paint.drawLine(shape.m_color2, 1, 0, chart.m_leftVScaleWidth, y2, chart.m_size.cx - chart.m_rightVScaleWidth, y2)
+			elif(shape.m_type == "text"):
+				for j in range(chart.m_firstVisibleIndex,lastValidIndex + 1):
+					x = getChartX(chart, j)
+					if(shape.m_datas[j] != 0):
+						y1 = getChartY(chart, shape.m_divIndex, shape.m_value)
+						drawText = shape.m_text
+						tSize = paint.textSize(drawText, "14px Arial")
+						paint.drawText(drawText, shape.m_color, "14px Arial", x - tSize.cx / 2, y1 - tSize.cy / 2)
 			else:
 				if(chart.m_selectShape == shape.m_name):
 					drawChartLines(chart, paint, clipRect, shape.m_divIndex, shape.m_datas, shape.m_color, TRUE)
