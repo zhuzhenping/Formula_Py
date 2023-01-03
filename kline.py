@@ -518,82 +518,94 @@ def onViewClick(view, mp, buttons, clicks, delta):
 		calcChartIndicator(m_chart)
 		invalidateView(m_chart, m_chart.m_paint)
 	elif(view.m_name == "formula"):
-		global m_shapes
-		file0 = open(os.getcwd() + "\\" + view.m_text, encoding="UTF-8")
-		formulaStr = file0.read()
-		file0.close()
-		print(formulaStr)
-		#计算指标
-		m_chart = findViewByName("chart", m_paint.m_views)
-		result = calculateFormulaWithShapes(formulaStr, m_chart.m_data)
-		m_chart.m_shapes = []
-		shapesArray = m_shapes.split("\r\n")
-		pos = 0
-		for s in range(0, len(shapesArray)):
-			subStrs = shapesArray[s].split(",")
-			if(len(subStrs) >= 2):
-				if(subStrs[0] == "bar"):
-					bar1 = BaseShape()
-					bar1.m_color = "rgb(0,255,0)"
-					bar1.m_color2 =  "rgb(255,0,0)"
-					bar1.m_divIndex = 2
-					bar1.m_type = "bar"
-					bar1.m_name = subStrs[1]
-					bar1.m_title = subStrs[1]
+		bindFormula(view.m_text)
+		
+
+#绑定公式
+def bindFormula(name):
+	global m_shapes
+	file0 = open(os.getcwd() + "\\" + name, encoding="UTF-8")
+	formulaStr = file0.read()
+	file0.close()
+	print(formulaStr)
+	#计算指标
+	m_chart = findViewByName("chart", m_paint.m_views)
+	result = calculateFormulaWithShapes(formulaStr, m_chart.m_data)
+	m_chart.m_shapes = []
+	shapesArray = m_shapes.split("\r\n")
+	pos = 0
+	for s in range(0, len(shapesArray)):
+		subStrs = shapesArray[s].split(",")
+		if(len(subStrs) >= 2):
+			if(subStrs[0] == "bar"):
+				is2Color = FALSE
+				if(len(subStrs) == 2 or len(subStrs[2]) == 0):
+					is2Color = TRUE
+				bar1 = BaseShape()
+				bar1.m_color = "rgb(255,80,80)"
+				bar1.m_color2 =  "rgb(80,255,255)"
+				bar1.m_divIndex = 2
+				bar1.m_type = "bar"
+				bar1.m_name = subStrs[1]
+				bar1.m_title = subStrs[1]
+				if(is2Color):
+					bar1.m_style = "2color"
+				else:
 					bar1.m_title2 = subStrs[2]
-					m_chart.m_shapes.append(bar1)
-					resultStrs = result.split("\r\n")
-					colIndex = 0
-					colIndex2 = 1
-					for r in range(0, len(resultStrs)):
-						sunStrs = resultStrs[r].split(",")
-						if(r == 0):
-							for u in range(0, len(sunStrs)):
-								if(sunStrs[u] == subStrs[1]):
-									colIndex = u
+				m_chart.m_shapes.append(bar1)
+				resultStrs = result.split("\r\n")
+				colIndex = 0
+				colIndex2 = 1
+				for r in range(0, len(resultStrs)):
+					sunStrs = resultStrs[r].split(",")
+					if(r == 0):
+						for u in range(0, len(sunStrs)):
+							if(sunStrs[u] == subStrs[1]):
+								colIndex = u
+							if(is2Color == FALSE):
 								if(sunStrs[u] == subStrs[2]):
 									colIndex2 = u
-						else:
-							if(len(sunStrs) >= colIndex + 1):
-								if(len(sunStrs[colIndex]) > 0):
-									bar1.m_datas.append(float(sunStrs[colIndex]))
-								else:
-									bar1.m_datas.append(0)
-								if(len(sunStrs[colIndex2]) > 0):
+					else:
+						if(len(sunStrs) >= colIndex + 1):
+							if(len(sunStrs[colIndex]) > 0 and sunStrs[colIndex] != '1.#QNAN0'):
+								bar1.m_datas.append(float(sunStrs[colIndex]))
+							else:
+								bar1.m_datas.append(0)
+							if(is2Color == FALSE):
+								if(len(sunStrs[colIndex2]) > 0 and sunStrs[colIndex2] != '1.#QNAN0'):
 									bar1.m_datas2.append(float(sunStrs[colIndex2]))
 								else:
 									bar1.m_datas2.append(0)
-		pos = 0
-		for s in range(0, len(shapesArray)):
-			subStrs = shapesArray[s].split(",")
-			if(len(subStrs) >= 2):
-				if(subStrs[0] == "line"):
-					line1 = BaseShape()
-					line1.m_color = m_drawColors[pos % len(m_drawColors)]
-					line1.m_divIndex = 2
-					line1.m_name = subStrs[1]
-					line1.m_title = subStrs[1]
-					m_chart.m_shapes.append(line1)
-					resultStrs = result.split("\r\n")
-					colIndex = 0
-					for r in range(0, len(resultStrs)):
-						sunStrs = resultStrs[r].split(",")
-						if(r == 0):
-							for u in range(0, len(sunStrs)):
-								if(sunStrs[u] == subStrs[1]):
-									colIndex = u
-									break
-						else:
-							if(len(sunStrs) >= colIndex + 1):
-								if(len(sunStrs[colIndex]) > 0):
-									line1.m_datas.append(float(sunStrs[colIndex]))
-								else:
-									line1.m_datas.append(0)
-					pos = pos + 1
-		calcChartIndicator(m_chart)
-		invalidateView(m_chart, m_chart.m_paint)
-
-		
+	pos = 0
+	for s in range(0, len(shapesArray)):
+		subStrs = shapesArray[s].split(",")
+		if(len(subStrs) >= 2):
+			if(subStrs[0] == "line"):
+				line1 = BaseShape()
+				line1.m_color = m_drawColors[pos % len(m_drawColors)]
+				line1.m_divIndex = 2
+				line1.m_name = subStrs[1]
+				line1.m_title = subStrs[1]
+				m_chart.m_shapes.append(line1)
+				resultStrs = result.split("\r\n")
+				colIndex = 0
+				for r in range(0, len(resultStrs)):
+					sunStrs = resultStrs[r].split(",")
+					if(r == 0):
+						for u in range(0, len(sunStrs)):
+							if(sunStrs[u] == subStrs[1]):
+								colIndex = u
+								break
+					else:
+						if(len(sunStrs) >= colIndex + 1):
+							if(len(sunStrs[colIndex]) > 0 and sunStrs[colIndex] != '1.#QNAN0'):
+								line1.m_datas.append(float(sunStrs[colIndex]))
+							else:
+								line1.m_datas.append(0)
+				pos = pos + 1
+	calcChartIndicator(m_chart)
+	invalidateView(m_chart, m_chart.m_paint)
+	
 
 #视图的鼠标滚动方法
 #view 视图
@@ -777,6 +789,7 @@ def initChart():
 				indButton.m_borderColor = "rgb(150,150,150)"
 				indButton.m_textColor = "rgb(0,0,0)"			
 	resetLayoutDiv(m_myLayout)
+	bindFormula("指数平滑异同平均线(MACD).js")
 
 m_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<html xmlns=\"facecat\">\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <div type=\"splitlayout\" layoutstyle=\"lefttoright\" bordercolor=\"none\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\" splitmode=\"AbsoluteSize\" splittervisible=\"true\" splitter-bordercolor=\"-200000000105\" splitterposition=\"250,1\">\r\n      <div type=\"layout\" name=\"mylayout\" layoutstyle=\"TopToBottom\">\r\n      </div>\r\n      <div type=\"splitlayout\" layoutstyle=\"bottomtotop\" bordercolor=\"none\" splitterposition=\"340,1\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\">\r\n        <div name=\"divLayout\" bordercolor=\"none\" />\r\n        <chart name=\"chart\" bordercolor=\"none\" />\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>"
 
