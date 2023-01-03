@@ -5971,6 +5971,25 @@ def showOrHideInput(paint, views):
 				if(win32gui.IsWindowVisible(view.m_hWnd)):
 					win32gui.ShowWindow(view.m_hWnd, SW_HIDE)
 
+#更新悬浮状态
+#views:视图集合
+def updateViewDefault(views):
+	for i in range(0,len(views)):
+		view = views[i]
+		if(view.m_dock == "fill"):
+			if(view.m_parent != None and view.m_parent.m_type != "split"):
+				view.m_location = FCPoint(0, 0)
+				view.m_size = FCSize(view.m_parent.m_size.cx, view.m_parent.m_size.cy)
+		if(view.m_type == "split"):
+			resetSplitLayoutDiv(view)
+		elif(view.m_type == "tabview"):
+			updateTabLayout(view)
+		elif(view.m_type == "layout"):
+			resetLayoutDiv(view)
+		subViews = view.m_views
+		if(len(subViews) > 0):
+			updateViewDefault(subViews)
+
 #鼠标移动方法
 #mp 坐标
 #buttons 按钮 0未按下 1左键 2右键
@@ -6003,6 +6022,7 @@ def onMouseMove(mp, buttons, clicks, delta, paint):
 		m_draggingView.m_location = FCPoint(newBounds.left, newBounds.top)
 		if (m_draggingView.m_parent != None and m_draggingView.m_parent.m_type == "split"):
 			resetSplitLayoutDiv(m_draggingView.m_parent)
+			updateViewDefault(m_draggingView.m_parent.m_views)
 		if (m_draggingView.m_parent != None):
 			invalidateView(m_draggingView.m_parent, m_draggingView.m_parent.m_paint)
 		else:
