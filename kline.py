@@ -216,6 +216,7 @@ def readXmlNode(paint, node, parent):
 					view.m_size = FCSize(int(atrDatum.split(',')[0]), int(atrDatum.split(',')[1]))
 				splitter = FCView()
 				splitter.m_paint = paint
+				splitter.m_parent = view
 				if(view.m_paint.m_defaultUIStyle == "dark"):
 					splitter.m_backColor = "rgb(100,100,100)"
 				elif(view.m_paint.m_defaultUIStyle == "light"):
@@ -301,6 +302,13 @@ def onViewPaint(view, paint, clipRect):
 		checkChartLastVisibleIndex(view)
 		calculateChartMaxMin(view)
 		drawChart(view, paint, clipRect)
+		global m_currentFormula
+		strs = m_currentFormula.split("\n")
+		pos = 0
+		for i in range(0, len(strs)):
+			if(len(strs[i]) > 1):
+				paint.drawText(strs[i], view.m_textColor, "14px Arial", 0, pos * 25)
+				pos = pos + 1		
 	elif(view.m_type == "grid"):
 		drawDiv(view, paint, clipRect)
 		drawGrid(view, paint, clipRect)
@@ -524,10 +532,11 @@ def onViewClick(view, mp, buttons, clicks, delta):
 #绑定公式
 def bindFormula(name):
 	global m_shapes
+	global m_currentFormula
 	file0 = open(os.getcwd() + "\\" + name, encoding="UTF-8")
 	formulaStr = file0.read()
 	file0.close()
-	print(formulaStr)
+	m_currentFormula = formulaStr
 	#计算指标
 	m_chart = findViewByName("chart", m_paint.m_views)
 	result = calculateFormulaWithShapes(formulaStr, m_chart.m_data)
@@ -652,6 +661,7 @@ def calculateFormula(formula, datas):
 	return str(recvData.value, encoding="gbk")
 
 m_shapes = ""
+m_currentFormula = ""
 #调用C++计算指标，附带图形返回
 #formula 公式
 #datas 数据
@@ -791,7 +801,7 @@ def initChart():
 	resetLayoutDiv(m_myLayout)
 	bindFormula("指数平滑异同平均线(MACD).js")
 
-m_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<html xmlns=\"facecat\">\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <div type=\"splitlayout\" layoutstyle=\"lefttoright\" bordercolor=\"none\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\" splitmode=\"AbsoluteSize\" splittervisible=\"true\" splitter-bordercolor=\"-200000000105\" splitterposition=\"250,1\">\r\n      <div type=\"layout\" name=\"mylayout\" layoutstyle=\"TopToBottom\">\r\n      </div>\r\n      <div type=\"splitlayout\" layoutstyle=\"bottomtotop\" bordercolor=\"none\" splitterposition=\"340,1\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\">\r\n        <div name=\"divLayout\" bordercolor=\"none\" />\r\n        <chart name=\"chart\" bordercolor=\"none\" />\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>"
+m_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<html xmlns=\"facecat\">\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <div type=\"splitlayout\" layoutstyle=\"lefttoright\" bordercolor=\"none\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\" splitmode=\"AbsoluteSize\" splittervisible=\"true\" splitter-bordercolor=\"-200000000105\" splitterposition=\"250,5\">\r\n      <div type=\"layout\" name=\"mylayout\" layoutstyle=\"TopToBottom\">\r\n      </div>\r\n      <div type=\"splitlayout\" layoutstyle=\"bottomtotop\" bordercolor=\"none\" splitterposition=\"340,1\" dock=\"fill\" size=\"400,400\" candragsplitter=\"true\">\r\n        <div name=\"divLayout\" bordercolor=\"none\" />\r\n        <chart name=\"chart\" bordercolor=\"none\" />\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>"
 
 m_paint = FCPaint() #创建绘图对象
 facecat.m_paintCallBack = onViewPaint 
